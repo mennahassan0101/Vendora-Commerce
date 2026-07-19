@@ -1,0 +1,268 @@
+# ==========================================
+# ENVIRONMENT & CONFIGURATION
+# ==========================================
+.env
+.env.backup
+.env.production
+.env.local
+.env.testing
+*.env
+!.env.example
+
+# ==========================================
+# CORE DEPENDENCIES
+# ==========================================
+/vendor
+/node_modules
+/composer.lock
+/package-lock.json
+/yarn.lock
+
+# ==========================================
+# IDE & EDITOR FILES
+# ==========================================
+/.idea
+/.vscode
+/.zed
+/.codex
+/.nova
+/.phpactor.json
+/.phpunit.cache
+/.phplint.cache
+/.php-cs-fixer.cache
+/.phpdoc
+/*.iml
+/*.sublime-*
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ==========================================
+# CACHE & LOGS
+# ==========================================
+*.log
+*.cache
+*.tmp
+storage/*.key
+storage/pail
+storage/logs/*.log
+storage/framework/cache/*
+storage/framework/sessions/*
+storage/framework/views/*
+storage/framework/testing/*
+bootstrap/cache/*.php
+!bootstrap/cache/.gitkeep
+public/hot
+public/storage
+public/build
+public/*.map
+public/fonts-manifest.dev.json
+public/mix-manifest.json
+public/js/*.map
+public/css/*.map
+
+# ==========================================
+# TESTING
+# ==========================================
+.phpunit.result.cache
+*.coverage
+*.xml
+.coverage
+.coveralls.yml
+.phpunit.cache
+/testbench
+/.phpunit
+/phpunit.xml
+/phpunit
+/test
+
+# ==========================================
+# PACKAGE & COMPOSER
+# ==========================================
+auth.json
+composer.phar
+composer.lock
+.phplint.yml
+.php_cs
+.php_cs.dist
+.phpcs.xml
+.phpmd.xml
+.phpstan.neon
+/phpstan.neon.dist
+
+# ==========================================
+# DATABASE
+# ==========================================
+*.sqlite
+*.sqlite3
+*.db
+*.sql
+/database/*.sqlite
+/database/*.sqlite3
+/database/*.db
+/database/migrations/*.sql
+!database/migrations/*.php
+!database/migrations/*.sql
+
+# ==========================================
+# LOCAL DEVELOPMENT FILES
+# ==========================================
+Homestead.json
+Homestead.yaml
+Vagrantfile
+.env.dusk.local
+.env.dusk.*
+.dusk
+.dusk-local
+.phpunit.result.cache
+/.fleet
+/.phplint-cache
+/.phpbench-cache
+/.php-cs-fixer.cache
+/.phpinsights.cache
+
+# ==========================================
+# PROJECT-SPECIFIC FOLDERS
+# ==========================================
+Study
+/Study
+Study/
+/Study/*
+**/Study/
+**/Study/*
+
+# ==========================================
+# TEMPORARY & MISC
+# ==========================================
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+*.bak
+*.backup
+*.old
+*.orig
+*.rej
+*.patch
+*.diff
+.DS_Store
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+._*
+
+# ==========================================
+# SECURITY & SENSITIVE FILES
+# ==========================================
+*.key
+*.pem
+*.crt
+*.csr
+*.p12
+*.pfx
+*.cert
+*.jks
+*.keystore
+*.truststore
+*.p8
+*.p7b
+*.p7c
+*.p10
+*.spc
+*.der
+/id_rsa
+/id_rsa.pub
+/private.key
+/public.key
+/.ssh
+
+# ==========================================
+# STATIC ANALYSIS TOOLS
+# ==========================================
+_ide_helper.php
+_ide_helper_models.php
+.phpstorm.meta.php
+.php_cs.cache
+.php-cs-fixer.cache
+.phpinsights.cache
+.phpunit.result.cache
+/phpstan.neon
+/phpunit.xml
+/.phpunit.result.cache
+
+# ==========================================
+# DOCKER
+# ==========================================
+/docker-compose.override.yml
+/docker-compose.local.yml
+/.docker
+/.dockerignore
+
+# ==========================================
+# GITHUB ACTIONS / CI
+# ==========================================
+/.github/workflows/*.yml
+/.github/CODEOWNERS
+/.github/ISSUE_TEMPLATE/
+/.github/PULL_REQUEST_TEMPLATE/
+/.github/renovate.json
+
+# ==========================================
+# TELESCOPE / HORIZON
+# ==========================================
+/storage/telescope
+/storage/horizon
+/telescope
+/horizon
+
+# ==========================================
+# DEBUG & PROFILING
+# ==========================================
+/.debug
+/.profile
+/.xdebug
+*.xdebug
+debug.log
+profile.log
+xhprof.*
+
+# ==========================================
+# DEPLOYMENT
+# ==========================================
+/deploy
+/deployments
+/.deploy
+/.deployments
+/.platform
+/.platform.app.yaml
+/.env.*.local
+/.env.local
+/.env.dev
+/.env.staging
+/.env.prod
+/.env.production
+/.env.ci
+/.env.ci.*
+/.env.test
+/.env.testing
+/.env.dusk
+/.env.dusk.*
+/.env.artisan
+
+# ==========================================
+# ADDITIONAL FILES (Specific to Your Project)
+# ==========================================
+# Any other sensitive or unnecessary files
+/public/uploads/temp/
+/storage/backups/
+/temp/
+/tmp/
+/tests/_output/
+/tests/_support/_generated/
+/_output/
+/_support/_generated/
