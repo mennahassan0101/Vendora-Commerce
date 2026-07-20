@@ -31,7 +31,9 @@ class ProductController extends Controller
             default => $query->orderBy('name'),
         };
 
-        $products = $query->paginate(12)->withQueryString();
+        $perPage = $request->filled('category') ? 6 : 9;
+
+        $products = $query->paginate($perPage)->withQueryString();
         $categories = Category::active()->orderBy('name')->get();
 
         return view('products.index', compact('products', 'categories'));
