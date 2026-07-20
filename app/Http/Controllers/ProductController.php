@@ -36,4 +36,28 @@ class ProductController extends Controller
 
         return view('products.index', compact('products', 'categories'));
     }
+
+    public function show(Product $product)
+    {
+        abort_unless($product->is_active, 404);
+
+        $product->load(['images', 'categories']);
+
+        $categoryIds = $product->categories->pluck('id');
+
+        $related = Product::query()
+            ->active()
+            ->where('id', '!=', $product->id)
+            ->when($categoryIds->isNotEmpty(), function ($query) use ($categoryIds) {
+                $query->whereHas('categories', function ($q) use ($categoryIds) {
+                    $q->whereIn('categories.id', $categoryIds);
+                });
+            })
+            ->with('primaryImage')
+            ->inRandomOrder()
+            ->take(4)
+            ->get();
+
+        return view('products.show', compact('product', 'related'));
+    }
 }

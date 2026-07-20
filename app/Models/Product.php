@@ -81,4 +81,9 @@ class Product extends Model
     {
         return $this->is_active && $this->stock > 0;
     }
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
+    }
+
 }
