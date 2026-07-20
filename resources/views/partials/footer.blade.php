@@ -14,6 +14,7 @@
             <ul class="mt-4 space-y-2 text-sm">
                 <li><a href="{{ route('products.index') }}" class="hover:text-white transition-colors">All products</a></li>
                 <li><a href="{{ route('home') }}#categories" class="hover:text-white transition-colors">Categories</a></li>
+                <li><a href="{{ route('orders.track') }}" class="hover:text-white transition-colors">Track your order</a></li>
             </ul>
         </div>
 

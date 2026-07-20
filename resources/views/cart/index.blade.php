@@ -107,15 +107,12 @@
                         <span>${{ number_format($subtotal, 2) }}</span>
                     </div>
 
-                    <button
-                        type="button"
-                        disabled
-                        title="Checkout isn't built yet — that's the next module"
-                        class="mt-6 w-full rounded-full bg-rose-600 text-white py-3.5 text-sm font-semibold opacity-50 cursor-not-allowed"
+                    <a
+                        href="{{ route('checkout.index') }}"
+                        class="mt-6 block w-full text-center rounded-full bg-rose-600 text-white py-3.5 text-sm font-semibold hover:bg-rose-700 transition-colors"
                     >
                         Proceed to checkout
-                    </button>
-                    <p class="mt-2 text-xs text-mauve text-center">Checkout is the next module — this is a placeholder for now.</p>
+                    </a>
                 </div>
             </div>
         @endif

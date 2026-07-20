@@ -28,9 +28,9 @@
                             All
                         </a>
                     </li>
-                    @foreach ($categories as $category)
+                     @foreach ($categories as $category)
                         <li>
-                            <a href="{{ route('products.index', array_filter(request()->except('page') + ['category' => $category->slug])) }}"
+                            <a href="{{ route('products.index', array_filter(request()->except(['page', 'category']) + ['category' => $category->slug])) }}"
                                class="{{ request('category') === $category->slug ? 'text-rose-600 font-semibold' : 'text-ink hover:text-rose-600' }} transition-colors">
                                 {{ $category->name }}
                             </a>
