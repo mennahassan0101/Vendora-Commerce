@@ -55,6 +55,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/notifications', [AdminNotificationController::class, 'index'])->name('notifications.index');
         Route::patch('/notifications/{notification}/read', [AdminNotificationController::class, 'markRead'])->name('notifications.read');
         Route::post('/notifications/read-all', [AdminNotificationController::class, 'markAllRead'])->name('notifications.read-all');
+        Route::get('/orders', [AdminOrderController::class, 'index'])->name('orders.index');
+        Route::get('/orders/{order}', [AdminOrderController::class, 'show'])->name('orders.show');
+        Route::patch('/orders/{order}/status', [AdminOrderController::class, 'updateStatus'])->name('orders.status');
     });
 
 });

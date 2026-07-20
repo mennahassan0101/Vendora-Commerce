@@ -73,6 +73,9 @@
                                 </td>
                                 <td class="px-6 py-3 text-right">${{ number_format($order->total, 2) }}</td>
                                 <td class="px-6 py-3 text-right text-mauve">{{ $order->created_at->diffForHumans() }}</td>
+                                <td class="px-6 py-3 font-medium">
+                                    <a href="{{ route('admin.orders.show', $order) }}" class="hover:text-rose-600">{{ $order->tracking_reference }}</a>
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>

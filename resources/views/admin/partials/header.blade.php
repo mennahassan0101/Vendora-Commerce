@@ -6,6 +6,7 @@
                 <a href="{{ route('admin.dashboard') }}" class="hover:text-rose-600 transition-colors">Dashboard</a>
                 <a href="{{ route('admin.products.index') }}" class="hover:text-rose-600 transition-colors">Products</a>
                 <a href="{{ route('admin.categories.index') }}" class="hover:text-rose-600 transition-colors">Categories</a>
+                <a href="{{ route('admin.orders.index') }}" class="hover:text-rose-600 transition-colors">Orders</a>
 
             </nav>
         </div>
