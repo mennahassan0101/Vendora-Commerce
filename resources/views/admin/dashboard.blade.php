@@ -7,21 +7,8 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="bg-rose-50/30 text-ink font-sans antialiased">
-        @include('admin.partials.header')
+      @include('admin.partials.header')
 
-
-    <header class="bg-white border-b border-rose-100">
-        <div class="max-w-7xl mx-auto px-6 lg:px-8 h-20 flex items-center justify-between">
-            <p class="font-display text-2xl">Vendora Admin</p>
-            <div class="flex items-center gap-6">
-                <span class="text-sm text-mauve">{{ auth()->user()->name }}</span>
-                <form method="POST" action="{{ route('admin.logout') }}">
-                    @csrf
-                    <button class="text-sm text-rose-600 hover:text-rose-700 font-semibold">Log out</button>
-                </form>
-            </div>
-        </div>
-    </header>
 
     <main class="max-w-7xl mx-auto px-6 lg:px-8 py-10">
 

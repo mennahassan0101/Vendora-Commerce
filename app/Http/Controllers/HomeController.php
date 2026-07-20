@@ -13,7 +13,7 @@ class HomeController extends Controller
             ->active()
             ->inStock()
             ->featured()
-            ->with('primaryImage')
+            ->with(['primaryImage', 'images'])
             ->latest()
             ->take(8)
             ->get();
@@ -21,7 +21,7 @@ class HomeController extends Controller
         $latest = Product::query()
             ->active()
             ->inStock()
-            ->with('primaryImage')
+            ->with(['primaryImage', 'images'])
             ->latest()
             ->take(8)
             ->get();

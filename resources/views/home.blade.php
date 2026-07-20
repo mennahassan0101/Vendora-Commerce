@@ -28,16 +28,10 @@
             </div>
         </div>
 
-        <x-blob-frame class="aspect-square p-10">
-            @if ($featured->first()?->primaryImage)
-                <img src="{{ asset('storage/' . $featured->first()->primaryImage->path) }}"
-                     alt="{{ $featured->first()->name }}"
-                     class="w-full h-full object-contain drop-shadow-md">
-            @else
-                <div class="w-2/3 h-2/3 rounded-3xl bg-white/70 border border-rose-200/70 flex items-center justify-center text-mauve text-sm text-center px-6">
-                    Add a featured product to showcase it here
-                </div>
-            @endif
+        <x-blob-frame class="aspect-[4/5] rounded-3xl p-10">
+            <img src="{{ asset('images/hero.webp') }}"
+                alt="Vendora"
+                class="w-full h-full object-contain">
         </x-blob-frame>
     </section>
 
@@ -50,10 +44,10 @@
         <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-5">
             @foreach ($categories as $category)
                 <a href="{{ route('products.index', ['category' => $category->slug]) }}" class="group text-center">
-                    <x-blob-frame class="aspect-square p-5">
+                    <x-blob-frame class="aspect-square rounded-full p-0">
                         @if ($category->image)
                             <img src="{{ asset('storage/' . $category->image) }}" alt="{{ $category->name }}"
-                                 class="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105">
+                                class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
                         @else
                             <span class="font-display text-2xl text-rose-700">{{ mb_substr($category->name, 0, 1) }}</span>
                         @endif

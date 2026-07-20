@@ -4,36 +4,30 @@
 
 @section('content')
 
-    {{-- BREADCRUMB --}}
-    <div class="max-w-7xl mx-auto px-6 lg:px-8 pt-8 text-sm text-mauve">
-        <a href="{{ route('home') }}" class="hover:text-rose-600 transition-colors">Home</a>
-        <span class="mx-2">/</span>
-        <a href="{{ route('products.index') }}" class="hover:text-rose-600 transition-colors">Shop</a>
+    <section class="max-w-7xl mx-auto px-6 lg:px-8 pt-10 pb-4 text-sm text-mauve">
+        <a href="{{ route('products.index') }}" class="hover:text-rose-600">Shop</a>
+        <span class="mx-1">/</span>
         @if ($product->categories->isNotEmpty())
-            <span class="mx-2">/</span>
-            <a href="{{ route('products.index', ['category' => $product->categories->first()->slug]) }}" class="hover:text-rose-600 transition-colors">
+            <a href="{{ route('products.index', ['category' => $product->categories->first()->slug]) }}" class="hover:text-rose-600">
                 {{ $product->categories->first()->name }}
             </a>
+            <span class="mx-1">/</span>
         @endif
-        <span class="mx-2">/</span>
         <span class="text-ink">{{ $product->name }}</span>
-    </div>
+    </section>
 
-    {{-- MAIN --}}
-    <section class="max-w-7xl mx-auto px-6 lg:px-8 pt-8 pb-20 grid lg:grid-cols-2 gap-12">
+    <section class="max-w-7xl mx-auto px-6 lg:px-8 pb-20 grid lg:grid-cols-2 gap-12">
 
-        {{-- GALLERY --}}
+        {{-- IMAGES --}}
         <div>
-            <x-blob-frame class="aspect-square p-10">
+            <x-blob-frame class="aspect-[4/5] rounded-3xl p-10">
                 @if ($product->images->isNotEmpty())
-                    <img
-                        id="main-image"
-                        src="{{ asset('storage/' . ($product->images->firstWhere('is_primary', true)?->path ?? $product->images->first()->path)) }}"
-                        alt="{{ $product->name }}"
-                        class="w-full h-full object-contain drop-shadow-md"
-                    >
+                    <img id="main-image"
+                         src="{{ asset('storage/' . ($product->primaryImage->path ?? $product->images->first()->path)) }}"
+                         alt="{{ $product->name }}"
+                         class="w-full h-full object-contain drop-shadow-md">
                 @else
-                    <div class="w-2/3 h-2/3 rounded-3xl bg-white/70 border border-rose-200/70 flex items-center justify-center text-mauve text-sm text-center px-6">
+                    <div class="w-2/3 h-2/3 rounded-3xl bg-white/70 border border-rose-200/70 flex items-center justify-center text-mauve text-sm">
                         No image yet
                     </div>
                 @endif
@@ -42,11 +36,9 @@
             @if ($product->images->count() > 1)
                 <div class="mt-4 flex gap-3">
                     @foreach ($product->images as $image)
-                        <button
-                            type="button"
-                            onclick="document.getElementById('main-image').src = this.querySelector('img').src"
-                            class="w-20 h-20 rounded-xl border border-rose-100 bg-rose-50/60 p-2 hover:border-rose-400 transition-colors"
-                        >
+                        <button type="button"
+                                class="thumb-btn w-16 h-16 rounded-xl border border-rose-200 overflow-hidden hover:border-rose-400 transition-colors"
+                                data-image="{{ asset('storage/' . $image->path) }}">
                             <img src="{{ asset('storage/' . $image->path) }}" alt="" class="w-full h-full object-contain">
                         </button>
                     @endforeach
@@ -54,7 +46,7 @@
             @endif
         </div>
 
-        {{-- INFO --}}
+        {{-- DETAILS --}}
         <div>
             @if ($product->categories->isNotEmpty())
                 <p class="text-xs font-semibold uppercase tracking-wider text-rose-600">
@@ -62,7 +54,7 @@
                 </p>
             @endif
 
-            <h1 class="mt-2 font-display text-4xl text-ink leading-tight">{{ $product->name }}</h1>
+            <h1 class="mt-2 font-display text-4xl text-ink">{{ $product->name }}</h1>
 
             <div class="mt-4 flex items-baseline gap-3">
                 <span class="text-2xl font-semibold text-ink">${{ number_format($product->price, 2) }}</span>
@@ -71,87 +63,120 @@
                 @endif
             </div>
 
-            <div class="mt-4 flex items-center gap-2 text-sm">
+            <p class="mt-6 text-mauve leading-relaxed">{{ $product->description }}</p>
+
+            <div class="mt-6">
                 @if ($product->isPurchasable())
-                    <span class="w-2 h-2 rounded-full bg-green-500"></span>
-                    <span class="text-ink">In stock</span>
                     @if ($product->isLowStock())
-                        <span class="text-rose-600">— only {{ $product->stock }} left</span>
+                        <p class="text-sm font-medium text-rose-600">Only {{ $product->stock }} left in stock</p>
+                    @else
+                        <p class="text-sm font-medium text-emerald-600">In stock</p>
                     @endif
                 @else
-                    <span class="w-2 h-2 rounded-full bg-mauve"></span>
-                    <span class="text-mauve">Out of stock</span>
+                    <p class="text-sm font-medium text-ink/60">Out of stock</p>
                 @endif
             </div>
 
-            @if ($product->short_description)
-                <p class="mt-6 text-mauve leading-relaxed">{{ $product->short_description }}</p>
-            @endif
-
-            {{-- Quantity + add to cart --}}
-            <form action="{{ route('cart.store') }}" method="POST" class="mt-8 flex items-center gap-4">
-                @csrf
-                <input type="hidden" name="product_id" value="{{ $product->id }}">
-
-                <label for="quantity" class="sr-only">Quantity</label>
-                <input
-                    id="quantity"
-                    type="number"
-                    name="quantity"
-                    min="1"
-                    max="{{ max($product->stock, 1) }}"
-                    value="1"
-                    {{ $product->isPurchasable() ? '' : 'disabled' }}
-                    class="w-20 rounded-lg border border-rose-200 px-3 py-2.5 text-center focus:outline-none focus:border-rose-400 disabled:opacity-50"
-                >
-                <button
-                    type="submit"
-                    {{ $product->isPurchasable() ? '' : 'disabled' }}
-                    class="flex-1 rounded-full bg-rose-600 text-white py-3 text-sm font-semibold hover:bg-rose-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-rose-600"
-                >
-                    {{ $product->isPurchasable() ? 'Add to cart' : 'Out of stock' }}
-                </button>
-            </form>
-
-            @if ($product->description)
-                <div class="mt-10 pt-10 border-t border-rose-100">
-                    <h2 class="font-display text-xl text-ink mb-3">Details</h2>
-                    <div class="text-mauve leading-relaxed whitespace-pre-line">{{ $product->description }}</div>
+            @if ($product->isPurchasable())
+                <form action="{{ route('cart.store') }}" method="POST" class="mt-8 flex items-center gap-4">
+                    @csrf
+                    <input type="hidden" name="product_id" value="{{ $product->id }}">
+                    <label for="qty" class="sr-only">Quantity</label>
+                    <input id="qty" type="number" name="quantity" min="1" max="{{ $product->stock }}" value="1"
+                           class="w-20 rounded-full border border-rose-200 px-4 py-3 text-sm text-center focus:outline-none focus:border-rose-400">
+                    <button type="submit"
+                            class="flex-1 rounded-full bg-rose-600 text-white py-3.5 text-sm font-semibold hover:bg-rose-700 transition-colors">
+                        Add to cart
+                    </button>
+                </form>
+            @else
+                <div class="mt-8">
+                    <button type="button" onclick="document.getElementById('notify-modal').showModal()"
+                            class="w-full rounded-full border-2 border-rose-600 text-rose-600 py-3.5 text-sm font-semibold hover:bg-rose-50 transition-colors">
+                        Notify me when available
+                    </button>
                 </div>
+
+                <dialog id="notify-modal" class="rounded-2xl p-0 backdrop:bg-ink/40 w-[calc(100%-2rem)] max-w-sm">
+                    <div class="p-6">
+                        <div class="flex items-start justify-between">
+                            <h2 class="font-display text-xl text-ink">Get notified</h2>
+                            <button type="button" onclick="document.getElementById('notify-modal').close()"
+                                    class="text-mauve hover:text-ink text-xl leading-none" aria-label="Close">
+                                &times;
+                            </button>
+                        </div>
+                        <p class="mt-1 text-sm text-mauve">We'll email you as soon as {{ $product->name }} is back in stock.</p>
+
+                        @if (session('notify_success'))
+                            <div class="mt-4 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-700 text-sm px-4 py-3">
+                                {{ session('notify_success') }}
+                            </div>
+                        @else
+                            @if ($errors->any())
+                                <div class="mt-4 rounded-lg bg-rose-50 border border-rose-200 text-rose-700 text-sm px-4 py-3">
+                                    {{ $errors->first() }}
+                                </div>
+                            @endif
+                            <form action="{{ route('stock-notifications.store') }}" method="POST" class="mt-4 space-y-3">
+                                @csrf
+                                <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                <label for="notify-name" class="sr-only">Name</label>
+                                <input id="notify-name" name="name" type="text" value="{{ old('name') }}" placeholder="Your name" required
+                                       class="w-full rounded-lg border border-rose-200 px-4 py-2.5 text-sm focus:outline-none focus:border-rose-400">
+
+                                <label for="notify-email" class="sr-only">Email</label>
+                                <input id="notify-email" name="email" type="email" value="{{ old('email') }}" placeholder="you@email.com" required
+                                       class="w-full rounded-lg border border-rose-200 px-4 py-2.5 text-sm focus:outline-none focus:border-rose-400">
+
+                                <label for="notify-phone" class="sr-only">Phone (optional)</label>
+                                <input id="notify-phone" name="phone" type="tel" value="{{ old('phone') }}" placeholder="Phone (optional)"
+                                       class="w-full rounded-lg border border-rose-200 px-4 py-2.5 text-sm focus:outline-none focus:border-rose-400">
+
+                                <button type="submit" class="w-full rounded-full bg-rose-600 text-white py-3 text-sm font-semibold hover:bg-rose-700 transition-colors">
+                                    Notify me
+                                </button>
+                            </form>
+                        @endif
+                    </div>
+                </dialog>
+
+                @if ($errors->any() || session('notify_success'))
+                    <script>
+                        document.addEventListener('DOMContentLoaded', () => {
+                            document.getElementById('notify-modal')?.showModal();
+                        });
+                    </script>
+                @endif
             @endif
         </div>
+    </section>
+
+    {{-- REVIEWS (placeholder until Reviews module) --}}
+    <section class="max-w-7xl mx-auto px-6 lg:px-8 pb-20 border-t border-rose-100 pt-14">
+        <h2 class="font-display text-2xl text-ink mb-6">Customer reviews</h2>
+        <p class="text-mauve text-sm">No reviews yet — be the first to review this product.</p>
     </section>
 
     {{-- RELATED PRODUCTS --}}
     @if ($related->isNotEmpty())
-        <section class="max-w-7xl mx-auto px-6 lg:px-8 pb-20">
-            <h2 class="font-display text-3xl text-ink mb-8">You might also like</h2>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-12">
-                @foreach ($related as $item)
-                    <x-product-card :product="$item" />
-                @endforeach
-            </div>
-        </section>
-    @endif
-
-    {{-- REVIEWS (placeholder — Reviews module builds the real thing) --}}
-    <section class="bg-rose-50/60">
-        <div class="max-w-7xl mx-auto px-6 lg:px-8 py-16">
-            <h2 class="font-display text-3xl text-ink mb-2">Customer reviews</h2>
-            <p class="text-mauve text-sm mb-8">Reviews aren't collected yet — this section will come alive with the Reviews module.</p>
-
-            <div class="bg-white rounded-2xl border border-rose-100 p-10 text-center">
-                <div class="flex justify-center gap-1 text-rose-300 mb-3" aria-hidden="true">
-                    @for ($i = 0; $i < 5; $i++)
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M10 1.5l2.6 5.6 6.1.6-4.6 4.1 1.3 6-5.4-3.1-5.4 3.1 1.3-6-4.6-4.1 6.1-.6L10 1.5z"/>
-                        </svg>
-                    @endfor
-                </div>
-                <p class="text-ink font-medium">No reviews yet</p>
-                <p class="text-mauve text-sm mt-1">Be the first to share what you think once reviews are enabled.</p>
-            </div>
+    <section class="max-w-7xl mx-auto px-6 lg:px-8 pb-24">
+        <h2 class="font-display text-2xl text-ink mb-8">You might also like</h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-12">
+            @foreach ($related as $item)
+                <x-product-card :product="$item" />
+            @endforeach
         </div>
     </section>
+    @endif
+    @push('scripts')
+    <script>
+        document.querySelectorAll('.thumb-btn').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                document.getElementById('main-image').src = btn.dataset.image;
+            });
+        });
+    </script>
+@endpush
 
 @endsection

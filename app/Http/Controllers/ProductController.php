@@ -12,7 +12,7 @@ class ProductController extends Controller
     {
         $query = Product::query()
             ->active()
-            ->with(['primaryImage', 'categories']);
+            ->with(['primaryImage', 'images', 'categories']);
 
         if ($request->filled('search')) {
             $query->where('name', 'like', '%' . $request->string('search') . '%');
@@ -53,7 +53,7 @@ class ProductController extends Controller
                     $q->whereIn('categories.id', $categoryIds);
                 });
             })
-            ->with('primaryImage')
+            ->with(['primaryImage', 'images'])
             ->inRandomOrder()
             ->take(4)
             ->get();

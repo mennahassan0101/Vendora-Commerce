@@ -5,6 +5,8 @@
             <nav class="flex items-center gap-6 text-sm font-medium text-ink/70">
                 <a href="{{ route('admin.dashboard') }}" class="hover:text-rose-600 transition-colors">Dashboard</a>
                 <a href="{{ route('admin.products.index') }}" class="hover:text-rose-600 transition-colors">Products</a>
+                <a href="{{ route('admin.categories.index') }}" class="hover:text-rose-600 transition-colors">Categories</a>
+
             </nav>
         </div>
         <div class="flex items-center gap-6">

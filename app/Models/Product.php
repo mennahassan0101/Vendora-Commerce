@@ -85,5 +85,9 @@ class Product extends Model
     {
         return 'slug';
     }
+    public function stockNotifications(): HasMany
+    {
+        return $this->hasMany(StockNotification::class);
+    }
 
 }
