@@ -11,8 +11,9 @@
     @stack('styles')
 </head>
 <body class="bg-white text-ink font-sans antialiased">
-
+    
     @include('partials.header')
+     @include('partials.flash')
 
     <main>
         {{ $slot ?? '' }}

@@ -88,12 +88,16 @@
                 <p class="mt-6 text-mauve leading-relaxed">{{ $product->short_description }}</p>
             @endif
 
-            {{-- Quantity + add to cart (cart module not wired up yet) --}}
-            <div class="mt-8 flex items-center gap-4">
+            {{-- Quantity + add to cart --}}
+            <form action="{{ route('cart.store') }}" method="POST" class="mt-8 flex items-center gap-4">
+                @csrf
+                <input type="hidden" name="product_id" value="{{ $product->id }}">
+
                 <label for="quantity" class="sr-only">Quantity</label>
                 <input
                     id="quantity"
                     type="number"
+                    name="quantity"
                     min="1"
                     max="{{ max($product->stock, 1) }}"
                     value="1"
@@ -101,15 +105,13 @@
                     class="w-20 rounded-lg border border-rose-200 px-3 py-2.5 text-center focus:outline-none focus:border-rose-400 disabled:opacity-50"
                 >
                 <button
-                    type="button"
-                    disabled
-                    title="Cart isn't wired up yet — coming in the Shopping Cart module"
-                    class="flex-1 rounded-full bg-rose-600 text-white py-3 text-sm font-semibold opacity-50 cursor-not-allowed"
+                    type="submit"
+                    {{ $product->isPurchasable() ? '' : 'disabled' }}
+                    class="flex-1 rounded-full bg-rose-600 text-white py-3 text-sm font-semibold hover:bg-rose-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-rose-600"
                 >
-                    Add to cart
+                    {{ $product->isPurchasable() ? 'Add to cart' : 'Out of stock' }}
                 </button>
-            </div>
-            <p class="mt-2 text-xs text-mauve">Cart functionality is the next module — this button is a placeholder for now.</p>
+            </form>
 
             @if ($product->description)
                 <div class="mt-10 pt-10 border-t border-rose-100">

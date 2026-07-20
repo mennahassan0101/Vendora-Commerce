@@ -25,12 +25,17 @@
                 >
             </form>
 
-            <a href="#" aria-label="Cart" class="relative p-2 rounded-full hover:bg-rose-50 transition-colors">
+            <a href="{{ route('cart.index') }}" aria-label="Cart" class="relative p-2 rounded-full hover:bg-rose-50 transition-colors">
                 <svg class="w-5 h-5 text-ink" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h1.5l2.4 12.4a2 2 0 0 0 2 1.6h8.2a2 2 0 0 0 2-1.6L21 8H6" />
                     <circle cx="9" cy="20" r="1.4" fill="currentColor" stroke="none"/>
                     <circle cx="17" cy="20" r="1.4" fill="currentColor" stroke="none"/>
                 </svg>
+                @if (($cartCount ?? 0) > 0)
+                    <span class="absolute -top-1 -right-1 flex items-center justify-center w-4.5 h-4.5 rounded-full bg-rose-600 text-white text-[10px] font-semibold">
+                        {{ $cartCount }}
+                    </span>
+                @endif
             </a>
         </div>
     </div>
