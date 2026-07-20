@@ -6,6 +6,7 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\OrderController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\Admin\AuthController as AdminAuthController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -22,3 +23,17 @@ Route::delete('/cart', [CartController::class, 'clear'])->name('cart.clear');
 Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
 Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
 Route::get('/track-order', [OrderController::class, 'track'])->name('orders.track');
+Route::prefix('admin')->name('admin.')->group(function () {
+Route::middleware('guest')->group(function () {
+    Route::get('/login', [AdminAuthController::class, 'showLogin'])->name('login');
+    Route::post('/login', [AdminAuthController::class, 'login']);
+});
+
+Route::middleware('admin')->group(function () {
+    Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
+
+    Route::get('/dashboard', function () {
+            return view('admin.dashboard');
+        })->name('dashboard');
+    });
+});

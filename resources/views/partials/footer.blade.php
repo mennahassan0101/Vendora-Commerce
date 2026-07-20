@@ -34,7 +34,10 @@
     <div class="border-t border-white/10">
         <div class="max-w-7xl mx-auto px-6 lg:px-8 py-5 text-xs text-white/40 flex justify-between">
             <span>&copy; {{ date('Y') }} Vendora. All rights reserved.</span>
-            <span>Made with care.</span>
+            <div class="flex items-center gap-4">
+                <span>Made with care.</span>
+                <a href="{{ route('admin.login') }}" class="hover:text-white/70 transition-colors">Admin</a>
+            </div>
         </div>
     </div>
 </footer>
