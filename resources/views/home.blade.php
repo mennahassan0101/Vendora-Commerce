@@ -5,18 +5,20 @@
 @section('content')
 
     {{-- HERO --}}
-    <section class="max-w-7xl mx-auto px-6 lg:px-8 pt-16 pb-20 grid lg:grid-cols-2 gap-12 items-center">
+    <section class="max-w-7xl mx-auto px-6 lg:px-8 pt-10 pb-20 grid lg:grid-cols-2 gap-12 items-start">
         <div>
-            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-rose-600">New season arrivals</p>
-            <h1 class="mt-4 font-display text-5xl sm:text-6xl leading-[1.05] text-ink">
+            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-rose-600 animate-fade-up">
+                New season arrivals
+            </p>
+            <h1 class="mt-4 font-display text-5xl sm:text-6xl leading-[1.05] text-ink animate-fade-up delay-150">
                 Curated finds,<br>
                 <span class="italic text-rose-600">delivered with care.</span>
             </h1>
-            <p class="mt-6 text-mauve text-lg max-w-md">
-                Browse and order in minutes — no account needed. Every piece
-                is picked for quality first, trend second.
+            <p class="mt-6 text-mauve text-lg max-w-md animate-fade-up delay-300">
+                Browse and order in minutes — Every piece is picked 
+                for quality first, trend second.
             </p>
-            <div class="mt-8 flex flex-wrap gap-4">
+            <div class="mt-8 flex flex-wrap gap-4 animate-fade-up delay-400">
                 <a href="{{ route('products.index') }}"
                    class="inline-flex items-center rounded-full bg-rose-600 text-white px-7 py-3.5 text-sm font-semibold hover:bg-rose-700 transition-colors">
                     Shop new arrivals
@@ -27,11 +29,11 @@
                 </a>
             </div>
         </div>
-
-        <x-blob-frame class="aspect-[4/5] rounded-3xl p-10">
+ 
+        <x-blob-frame class="aspect-square p-10" :animated="true">
             <img src="{{ asset('images/hero.webp') }}"
-                alt="Vendora"
-                class="w-full h-full object-contain">
+                 alt="Vendora — curated finds, delivered with care"
+                 class="w-full h-full object-contain drop-shadow-md">
         </x-blob-frame>
     </section>
 

@@ -11,6 +11,8 @@ use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\StockNotificationController;
+use App\Http\Controllers\Admin\NotificationController as AdminNotificationController;
+use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 
 
 // ---- Public storefront ----
@@ -31,6 +33,7 @@ Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.s
 
 Route::get('/track-order', [OrderController::class, 'track'])->name('orders.track');
 Route::post('/stock-notifications', [StockNotificationController::class, 'store'])->name('stock-notifications.store');
+
 // ---- Admin ----
 
 Route::prefix('admin')->name('admin.')->group(function () {
@@ -45,10 +48,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::resource('products', AdminProductController::class)->except(['show']);
         Route::delete('/products/{product}/images/{image}', [AdminProductController::class, 'destroyImage'])->name('products.images.destroy');
         Route::patch('/products/{product}/images/{image}/primary', [AdminProductController::class, 'setPrimaryImage'])->name('products.images.primary');
-        Route::resource('categories', AdminCategoryController::class)->except(['show']);
+
         Route::resource('categories', AdminCategoryController::class)->except(['show']);
         Route::delete('/categories/{category}/image', [AdminCategoryController::class, 'destroyImage'])->name('categories.images.destroy');
 
+        Route::get('/notifications', [AdminNotificationController::class, 'index'])->name('notifications.index');
+        Route::patch('/notifications/{notification}/read', [AdminNotificationController::class, 'markRead'])->name('notifications.read');
+        Route::post('/notifications/read-all', [AdminNotificationController::class, 'markAllRead'])->name('notifications.read-all');
     });
 
 });

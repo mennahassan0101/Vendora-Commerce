@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Builder;
+use App\Notifications\Admin\LowStockAlert;
+use App\Notifications\Admin\ProductUnavailable;
+use App\Services\AdminNotifier;
 
 
 class Product extends Model
@@ -51,6 +54,22 @@ class Product extends Model
     public function primaryImage(): HasOne
     {
         return $this->hasOne(ProductImage::class)->where('is_primary', true);
+    }
+    protected static function booted(): void
+    {
+        static::updated(function (Product $product) {
+            if ($product->wasChanged('stock')) {
+                if ($product->stock === 0) {
+                    AdminNotifier::send(new ProductUnavailable($product));
+                } elseif ($product->isLowStock()) {
+                    AdminNotifier::send(new LowStockAlert($product));
+                }
+            }
+
+            if ($product->wasChanged('is_active') && ! $product->is_active) {
+                AdminNotifier::send(new ProductUnavailable($product));
+            }
+        });
     }
 
     // ---- Scopes ----

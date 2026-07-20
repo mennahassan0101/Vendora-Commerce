@@ -1,13 +1,18 @@
 <?php
 
 namespace App\Models;
-//use APP\Models\OrderItem;
 
+use App\Notifications\Admin\NewOrderPlaced;
+use App\Notifications\Customer\OrderStatusUpdated;
+use App\Services\AdminNotifier;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Notifications\Notifiable;
 
 class Order extends Model
 {
+    use Notifiable;
+
     protected $fillable = [
         'tracking_reference',
         'customer_name',
@@ -34,6 +39,24 @@ class Order extends Model
         ];
     }
 
+    protected static function booted(): void
+    {
+        static::created(function (Order $order) {
+            AdminNotifier::send(new NewOrderPlaced($order));
+        });
+
+        static::updated(function (Order $order) {
+            if ($order->wasChanged('status')) {
+                $order->notify(new OrderStatusUpdated($order));
+            }
+        });
+    }
+
+    public function routeNotificationForMail(): string
+    {
+        return $this->customer_email;
+    }
+
     public function items(): HasMany
     {
         return $this->hasMany(OrderItem::class);
@@ -44,10 +67,6 @@ class Order extends Model
         return $this->hasMany(OrderStatusHistory::class)->orderBy('created_at');
     }
 
-    /**
-     * Flat shipping rule, single source of truth used by both the checkout
-     * summary (before an order exists) and OrderService (when creating one).
-     */
     public static function calculateShipping(float $subtotal): float
     {
         return $subtotal >= 50 ? 0.0 : 5.99;
