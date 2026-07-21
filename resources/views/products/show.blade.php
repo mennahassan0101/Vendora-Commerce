@@ -151,10 +151,100 @@
         </div>
     </section>
 
-    {{-- REVIEWS (placeholder until Reviews module) --}}
+    {{-- REVIEWS --}}
     <section class="max-w-7xl mx-auto px-6 lg:px-8 pb-20 border-t border-rose-100 pt-14">
-        <h2 class="font-display text-2xl text-ink mb-6">Customer reviews</h2>
-        <p class="text-mauve text-sm">No reviews yet — be the first to review this product.</p>
+        <div class="grid lg:grid-cols-[1fr_360px] gap-12">
+
+            <div>
+                <h2 class="font-display text-2xl text-ink mb-6">Customer reviews</h2>
+
+                @if ($product->reviews->isEmpty())
+                    <p class="text-mauve text-sm">No reviews yet — be the first to review this product.</p>
+                @else
+                    <div class="space-y-6">
+                        @foreach ($product->reviews as $review)
+                            <div class="border-b border-rose-50 pb-6 last:border-0">
+                                <div class="flex items-center gap-2">
+                                    <div class="flex text-rose-500">
+                                        @for ($i = 1; $i <= 5; $i++)
+                                            <span>{{ $i <= $review->rating ? '★' : '☆' }}</span>
+                                        @endfor
+                                    </div>
+                                    @if ($review->title)
+                                        <p class="font-medium text-ink">{{ $review->title }}</p>
+                                    @endif
+                                </div>
+                                <p class="mt-2 text-sm text-mauve leading-relaxed">{{ $review->comment }}</p>
+                                <p class="mt-2 text-xs text-mauve">
+                                    {{ $review->reviewer_name }} · {{ $review->created_at->format('M j, Y') }}
+                                </p>
+                            </div>
+                        @endforeach
+                    </div>
+                @endif
+            </div>
+
+            {{-- WRITE A REVIEW --}}
+            <div class="bg-rose-50/60 rounded-2xl p-6 h-fit">
+                <h3 class="font-display text-lg text-ink mb-4">Write a review</h3>
+
+                @if (session('review_success'))
+                    <div class="mb-4 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-700 text-sm px-4 py-3">
+                        {{ session('review_success') }}
+                    </div>
+                @else
+                    @if ($errors->any())
+                        <div class="mb-4 rounded-lg bg-rose-50 border border-rose-200 text-rose-700 text-sm px-4 py-3">
+                            <ul class="list-disc list-inside space-y-1">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
+                    <form action="{{ route('reviews.store') }}" method="POST" class="space-y-3">
+                        @csrf
+                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+
+                        <div>
+                            <label for="rating" class="block text-xs font-medium text-ink mb-1">Rating</label>
+                            <select id="rating" name="rating" required
+                                    class="w-full rounded-lg border border-rose-200 px-3 py-2 text-sm focus:outline-none focus:border-rose-400">
+                                <option value="">Select a rating</option>
+                                <option value="5" @selected(old('rating') == 5)>★★★★★ Excellent</option>
+                                <option value="4" @selected(old('rating') == 4)>★★★★☆ Good</option>
+                                <option value="3" @selected(old('rating') == 3)>★★★☆☆ Average</option>
+                                <option value="2" @selected(old('rating') == 2)>★★☆☆☆ Poor</option>
+                                <option value="1" @selected(old('rating') == 1)>★☆☆☆☆ Terrible</option>
+                            </select>
+                        </div>
+
+                        <label for="reviewer_name" class="sr-only">Your name</label>
+                        <input id="reviewer_name" name="reviewer_name" type="text" value="{{ old('reviewer_name') }}" placeholder="Your name" required
+                            class="w-full rounded-lg border border-rose-200 px-3 py-2 text-sm focus:outline-none focus:border-rose-400">
+
+                        <label for="reviewer_email" class="sr-only">Your email</label>
+                        <input id="reviewer_email" name="reviewer_email" type="email" value="{{ old('reviewer_email') }}" placeholder="you@email.com" required
+                            class="w-full rounded-lg border border-rose-200 px-3 py-2 text-sm focus:outline-none focus:border-rose-400">
+                        <p class="text-[11px] text-mauve -mt-1">Won't be shown publicly — used to verify your review.</p>
+
+                        <label for="title" class="sr-only">Title (optional)</label>
+                        <input id="title" name="title" type="text" value="{{ old('title') }}" placeholder="Review title (optional)"
+                            class="w-full rounded-lg border border-rose-200 px-3 py-2 text-sm focus:outline-none focus:border-rose-400">
+
+                        <label for="comment" class="sr-only">Your review</label>
+                        <textarea id="comment" name="comment" rows="4" placeholder="Share your thoughts on this product…" required
+                                class="w-full rounded-lg border border-rose-200 px-3 py-2 text-sm focus:outline-none focus:border-rose-400">{{ old('comment') }}</textarea>
+
+                        <button type="submit" class="w-full rounded-full bg-rose-600 text-white py-2.5 text-sm font-semibold hover:bg-rose-700 transition-colors">
+                            Submit review
+                        </button>
+                    </form>
+                @endif
+            </div>
+
+        </div>
     </section>
 
     {{-- RELATED PRODUCTS --}}

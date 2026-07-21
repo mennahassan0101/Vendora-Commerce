@@ -8,6 +8,7 @@
                 <a href="{{ route('admin.categories.index') }}" class="hover:text-rose-600 transition-colors">Categories</a>
                 <a href="{{ route('admin.orders.index') }}" class="hover:text-rose-600 transition-colors">Orders</a>
                 <a href="{{ route('admin.customers.index') }}" class="hover:text-rose-600 transition-colors">Customers</a>
+                <a href="{{ route('admin.reviews.index') }}" class="hover:text-rose-600 transition-colors">Reviews</a>
             </nav>
         </div>
         <div class="flex items-center gap-6">

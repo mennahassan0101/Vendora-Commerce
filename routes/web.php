@@ -14,6 +14,8 @@ use App\Http\Controllers\StockNotificationController;
 use App\Http\Controllers\Admin\NotificationController as AdminNotificationController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\CustomerController as AdminCustomerController;
+use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\Admin\ReviewController as AdminReviewController;
 
 
 // ---- Public storefront ----
@@ -34,7 +36,7 @@ Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.s
 
 Route::get('/track-order', [OrderController::class, 'track'])->name('orders.track');
 Route::post('/stock-notifications', [StockNotificationController::class, 'store'])->name('stock-notifications.store');
-
+Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store');
 // ---- Admin ----
 
 Route::prefix('admin')->name('admin.')->group(function () {
@@ -61,6 +63,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::patch('/orders/{order}/status', [AdminOrderController::class, 'updateStatus'])->name('orders.status');
         Route::get('/customers', [AdminCustomerController::class, 'index'])->name('customers.index');
         Route::get('/customers/{email}', [AdminCustomerController::class, 'show'])->name('customers.show');
+        Route::get('/reviews', [AdminReviewController::class, 'index'])->name('reviews.index');
+        Route::patch('/reviews/{review}/approve', [AdminReviewController::class, 'approve'])->name('reviews.approve');
+        Route::delete('/reviews/{review}', [AdminReviewController::class, 'destroy'])->name('reviews.destroy');
     });
 
 });
