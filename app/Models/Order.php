@@ -41,9 +41,9 @@ class Order extends Model
 
     protected static function booted(): void
     {
-        static::created(function (Order $order) {
-            AdminNotifier::send(new NewOrderPlaced($order));
-        });
+        // static::created(function (Order $order) {
+        //     AdminNotifier::send(new NewOrderPlaced($order));
+        // });
 
         static::updated(function (Order $order) {
             if ($order->wasChanged('status')) {

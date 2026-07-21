@@ -97,8 +97,7 @@
                     </button>
                 </div>
 
-                <dialog id="notify-modal" class="rounded-2xl p-0 backdrop:bg-ink/40 w-[calc(100%-2rem)] max-w-sm">
-                    <div class="p-6">
+                    <dialog id="notify-modal" class="m-auto rounded-2xl p-0 backdrop:bg-ink/40 w-[calc(100%-2rem)] max-w-sm">                    <div class="p-6">
                         <div class="flex items-start justify-between">
                             <h2 class="font-display text-xl text-ink">Get notified</h2>
                             <button type="button" onclick="document.getElementById('notify-modal').close()"
