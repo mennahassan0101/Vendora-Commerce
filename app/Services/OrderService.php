@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Events\OrderPlaced;
 use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Support\Collection;
@@ -21,7 +22,7 @@ class OrderService
      */
     public function placeOrder(array $customer, Collection $lines): Order
     {
-        return DB::transaction(function () use ($customer, $lines) {
+        $order = DB::transaction(function () use ($customer, $lines) {
             $subtotal = round((float) $lines->sum('subtotal'), 2);
             $shipping = Order::calculateShipping($subtotal);
             $total = round($subtotal + $shipping, 2);
@@ -44,8 +45,7 @@ class OrderService
             ]);
 
             foreach ($lines as $line) {
-                // Lock the row so two simultaneous checkouts can't both
-                // succeed against the same last unit of stock.
+
                 $product = Product::where('id', $line->product->id)->lockForUpdate()->first();
 
                 if (! $product || $product->stock < $line->quantity) {
@@ -70,6 +70,10 @@ class OrderService
 
             return $order;
         });
+
+        OrderPlaced::dispatch($order);
+
+        return $order;
     }
 
     protected function generateTrackingReference(): string
